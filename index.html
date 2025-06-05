@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="张韬 - 产品经理个人简历网站，展示技能、项目经验及联系方式">
+    <title>about me</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <style>
+        /* 高亮数据样式 */
+        .highlight-data {
+            color: #0078d7;
+            font-weight: 600;
+        }
+        
+        /* 添加全局粒子背景样式 */
+        #global-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1; /* 确保在最底层 */
+            pointer-events: none; /* 允许点击穿透 */
+        }
+        
+        /* 添加页面进度条样式 */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #6a4da1, #8a6fd7);
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+        
+        /* 新的返回顶部按钮样式 */
+        .back-to-top-btn {
+            position: fixed;
+            bottom: 30px; /* 恢复到30px，实现上移效果 */
+            right: 30px;
+            background-color: rgba(106, 77, 161, 0.85); /* 紫色调，参考 #6a4da1 */
+            color: white;
+            padding: 10px 15px; /* 恢复原始内边距 */
+            border-radius: 25px; /* 恢复原始的较大圆角，形成药丸状 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, background-color 0.3s ease, transform 0.3s ease; /* 添加transform过渡 */
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+
+        .back-to-top-btn i {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        .back-to-top-btn:hover,
+        .back-to-top-btn:focus { /* 合并hover和focus状态 */
+            background-color: #563d7c; /* 深一点的紫色 */
+            color: #fff; /* 确保文字清晰 */
+            outline: none; /* 移除默认焦点轮廓 */
+            transform: translateY(-2px); /* 轻微上移效果 */
+        }
+
+        .back-to-top-btn.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* 隐藏年份显示，但保留元素供JS使用 */
+        #current-year {
+            display: none;
+        }
+
+        /* 其他荣誉区域样式 */
+        .other-honors {
+            margin-top: 30px; /* 与证书网格的间距 */
+            padding-top: 20px;
+            border-top: 1px solid #eee; /* 分隔线 */
+        }
+
+        .other-honors-title {
+            font-size: 1.4em; /* 调整标题大小 */
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .other-honors-list {
+            list-style: none; /* 移除默认列表样式 */
+            padding-left: 0;
+        }
+
+        .other-honors-list li {
+            background-color: #f9f9f9; /* 轻微背景色 */
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 8px; /* 项目间距 */
+            font-size: 1em;
+            color: #555;
+            border-left: 3px solid #0078d7; /* 左侧强调线 */
+        }
+
+        /* 英雄区描述文字擦拭效果 */
+        .hero-description {
+            /* opacity: 0; */ /* 通过 clip-path 控制初始可见性，不再需要 opacity: 0 */
+            animation: wipeIn 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; /* 应用新的擦拭进入动画 */
+            /* animation-delay: 0.5s; */ /* 确保任何旧的延迟被移除或注释掉 */
+        }
+
+        @keyframes wipeIn { /* 新的文本擦拭进入动画，实现从上到下的出现效果 */
+            from {
+                clip-path: inset(0 0 100% 0); /* 初始状态：文本从底部被裁剪，实现从上到下的出现效果 */
+            }
+            to {
+                clip-path: inset(0 0 0 0);   /* 最终状态：文本完全可见 */
+            }
+        }
+
+        /* 英雄区布局调整 */
+        .personal-overview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        /* 新的滚动提示箭头样式 - 使用新类名 hero-scroll-cue */
+        .hero-scroll-cue {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 30px; /* 调整与上方卡片的间距 */
+            z-index: 10;
+            opacity: 0;
+            animation: fadeInSimple 1s ease-out forwards 1.2s;
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .hero-scroll-cue:hover {
+            transform: translateY(-3px); /* 悬停时轻微上浮 */
+        }
+
+        .hero-scroll-cue svg {
+            width: 32px;
+            height: 32px;
+            /* fill: rgba(255, 255, 255, 0.85); */ /* 改为描边 */
+            stroke: rgba(255, 255, 255, 0.85);
+            stroke-width: 1.1;
+            fill: none; /* 确保只有描边 */
+            animation: subtleBounce 2.5s infinite ease-in-out;
+            transition: stroke 0.3s ease; /* 过渡改为stroke */
+        }
+
+        .hero-scroll-cue:hover svg {
+            /* fill: #ffffff; */ /* 改为描边 */
+            stroke: #ffffff;
+        }
+        
+        /* 新的上下浮动动画 */
+        @keyframes subtleBounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(6px); /* 调整浮动幅度 */
+            }
+        }
+        
+        /* 修改fadeIn动画，使其更简单 */
+        @keyframes fadeInSimple {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* 荣誉证书网格调整 */
+        .honors-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 默认四个一排 */
+            gap: 20px; /* 项目之间的间距 */
+        }
+
+        /* 响应式调整荣誉证书网格 */
+        @media (max-width: 1024px) { /* 平板设备 */
+            .honors-grid {
+                grid-template-columns: repeat(2, 1fr); /*两个一排 */
+            }
+        }
+
+        @media (max-width: 768px) { /* 移动设备 */
+            .honors-grid {
+                grid-template-columns: 1fr; /* 一个一排 */
+            }
+            
+            /* 移除移动设备下对 .scroll-indicator 的特定padding以及已废弃的类样式 */
+            /* .scroll-indicator {
+                padding: 6px 12px; 
+            } */
+            
+            /* .scroll-indicator-text {
+                font-size: 14px; 
+            } */
+            
+            /* .scroll-icon {
+                font-size: 20px; 
+            } */
+        }
+
+        /**
+         * @fileoverview Styles for optimizing the 'Skills' section layout.
+         * These styles aim to reduce vertical space by restructuring category display
+         * and making skill tags more compact.
+         */
+
+        /**
+         * Styles for the container of skill tags within a category.
+         * Uses flexbox for compact and wrapping layout of tags.
+         * Each skills-tags group is now placed directly after a descriptive paragraph.
+         */
+        .skills-tags {
+            display: flex;     /* Enables flexbox layout */
+            flex-wrap: wrap;   /* Allows tags to wrap to the next line */
+            gap: 8px 10px;      /* Vertical (row) and horizontal (column) spacing between tags */
+            margin-top: 10px;  /* Space above the tags, separating from the paragraph */
+            margin-bottom: 20px; /* Space below the tags, before the next paragraph or section end */
+        }
+
+        /**
+         * Styles for individual skill tags.
+         * Styled as pills with a background color, rounded corners, and appropriate padding.
+         */
+        .skill-tag {
+            background-color: #EDE7F6; /* Lighter purple background */
+            color: #5D3D7C;           /* Darker purple text for better readability on light bg */
+            padding: 4px 10px;         /* Slightly reduced padding */
+            border-radius: 15px;       /* Rounded corners for pill */
+            font-size: 0.85em;         /* Slightly smaller font */
+            margin: 0;                 /* Margins handled by 'gap' in .skills-tags container */
+            display: inline-block;     /* Consistent behavior */
+            line-height: 1.4;          /* Adjust for vertical text alignment if needed */
+            transition: background-color 0.15s ease-in-out, transform 0.15s ease-in-out; /* Quick transition for hover/focus, now includes transform */
+        }
+
+        .skill-tag:hover,
+        .skill-tag:focus {
+            background-color: #6A4DA1; /* Slightly lighter deep purple on hover/focus */
+            color: #FFFFFF;            /* White text for contrast on deep purple background */
+            outline: none;             /* Remove default focus outline */
+            transform: none;           /* Explicitly remove any scaling or other transforms on hover/focus */
+        }
+
+        /* 其他自述区域优化 - 多列布局与紧凑标题 */
+        .self-assessment-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 两列布局 */
+            gap: 30px; /* 项目之间的间距 */
+        }
+
+        .self-item {
+            /* 可选: 若希望每个自述项有更明确的边界或背景，可在此添加样式 */
+            /* 例如: padding: 15px; background-color: #f9f9f9; border-radius: 8px; */
+        }
+
+        .self-item-header {
+            display: flex;
+            align-items: center; /* 垂直居中对齐图标和标题 */
+            margin-bottom: 12px; /* 标题和下方内容的间距 */
+        }
+
+        .self-item-header i {
+            margin-right: 10px; /* 图标和标题文字之间的间距 */
+            font-size: 1.5em;   /* 调整图标大小, 可以根据视觉效果微调 */
+            color: #6a4da1;    /* 使用主题色或醒目的颜色 */
+        }
+
+        .self-item-header h3 {
+            margin: 0; /* 移除h3的默认外边距 */
+            font-size: 1.15em; /* 调整标题字体大小, 可以根据视觉效果微调 */
+            color: #333;      /* 确保标题清晰可读 */
+        }
+        
+        .self-item p, 
+        .self-item .hobbies-container { /* 确保段落和爱好容器与标题有合适的间距 */
+            margin-top: 0; 
+        }
+        
+        /* 确保爱好标签容器内的项目正确显示 */
+        .hobbies-container {
+            display: flex;
+            flex-wrap: wrap; /* 允许标签换行 */
+            gap: 8px;       /* 爱好标签之间的间距 */
+            margin-top: 5px; /* 与上方标题的间距, 如果标题已有margin-bottom可省略或调整 */
+        }
+        
+        /* hobby-tag 的基础样式应在 style.css 或此处定义/调整 */
+        /* 以下为建议补充，确保图标和文字在同一行，且有间距 */
+        .hobby-tag {
+            display: inline-flex; /* 使图标和文字在同一行 */
+            align-items: center;  /* 垂直居中对齐 */
+            padding: 5px 10px; /* 调整内边距 */
+            /* background-color: #f0f0f0; border-radius: 15px; */ /* 示例样式,可根据实际需要取消注释或修改 */
+            font-size: 0.9em; /* 调整字体大小 */
+        }
+        .hobby-tag i {
+            margin-right: 5px; /* 图标和爱好文字的间距 */
+            font-size: 0.9em; /* 调整图标大小，使其略小于文字 */
+        }
+
+        /* 响应式调整：平板和移动设备下单列显示 */
+        @media (max-width: 992px) { /* 考虑在平板尺寸也切换为单列 */
+            .self-assessment-content {
+                grid-template-columns: 1fr; /* 单列布局 */
+                gap: 25px; /* 调整间距 */
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .self-item-header i {
+                font-size: 1.4em; /* 略微调整图标大小 */
+            }
+
+            .self-item-header h3 {
+                font-size: 1.1em; /* 略微调整标题大小 */
+            }
+        }
+
+        /* 荣誉证书网格调整 */
+        .honors-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 默认四个一排 */
+            gap: 20px; /* 项目之间的间距 */
+        }
+
+        /* 响应式调整荣誉证书网格 */
+        @media (max-width: 1024px) { /* 平板设备 */
+            .honors-grid {
+                grid-template-columns: repeat(2, 1fr); /*两个一排 */
+            }
+        }
+
+        @media (max-width: 768px) { /* 移动设备 */
+            .honors-grid {
+                grid-template-columns: 1fr; /* 一个一排 */
+            }
+            
+            /* 移除移动设备下对 .scroll-indicator 的特定padding以及已废弃的类样式 */
+            /* .scroll-indicator {
+                padding: 6px 12px; 
+            } */
+            
+            /* .scroll-indicator-text {
+                font-size: 14px; 
+            } */
+            
+            /* .scroll-icon {
+                font-size: 20px; 
+            } */
+        }
+    </style>
+</head>
+<body>
+    <!-- 添加全局粒子背景 -->
+    <div id="global-particles"></div>
+
+    <!-- 添加页面进度条 -->
+    <div class="progress-container" id="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <!-- 导航栏 -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">个人简历</div>
+            <nav class="nav">
+                <ul class="nav-links">
+                    <li><a href="#experience">工作经历</a></li>
+                    <li><a href="#projects">项目经验</a></li>
+                    <li><a href="#skills">技能特长</a></li>
+                    <li><a href="#about">其他非核心竞争力</a></li>
+                    <li><a href="#honors">荣誉证书</a></li>
+                    <li><a href="#contact">联系我</a></li>
+                </ul>
+                <a href="JL.pdf" download="张韬-产品经理-简历.pdf" class="download-btn">下载简历 (PDF)</a>
+                <div class="menu-toggle">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 首屏/英雄区 -->
+    <section id="hero" class="hero">
+        <div id="particles-js" class="particles"></div>
+        <div class="container hero-content">
+            <div class="personal-overview">
+                <div class="overview-card">
+                    <div class="overview-main">
+                        <div class="overview-header">
+                            <div class="overview-image">
+                                <img src="头像.pic.jpg" alt="张韬个人照片" class="profile-img">
+                            </div>
+                            <div class="overview-title">
+                                <h1 class="hero-title">张韬</h1>
+                    
+                                <p class="hero-description" id="hero-description-text">6年toC/toB产品经验，主要包含国家级税务平台及大型企业财务管理类应用的建设运营（涵盖APP/Web/PC端），现阶段也在探索AI与多元工作生活场景的创新实践。</p>
+                            </div>
+                        </div>
+                        <div class="overview-info">
+                            <div class="info-item">
+                                <i class="ri-user-line"></i>
+                                <span>性别：男</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="ri-calendar-line"></i>
+                                <span>年龄：28（1996-12）</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="ri-briefcase-line"></i>
+                                <span>职业：产品经理</span>
+                            </div>
+                            <div class="info-item edu-info">
+                                <i class="ri-graduation-cap-line"></i>
+                                <div class="edu-detail">
+                                    <span>沈阳师范大学 - 网络工程 (本科) (2014-09~2018-06)</span>
+                                    <span class="edu-courses">主修：网络工程、C语言、Java程序设计、计算机网络、数据结构等</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#experience" class="hero-scroll-cue">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 工作经历 -->
+    <section id="experience" class="experience section">
+        <div class="card-container">
+            <div class="section-card">
+                <h2 class="section-title">工作经历</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <h3 class="timeline-title">税友软件集团股份有限公司</h3>
+                                <span class="timeline-date">2021-12 ~ 至今</span>
+                            </div>
+                            <div class="timeline-position">产品经理</div>
+                            <div class="timeline-body">
+                                <ul>
+                                    <li>负责个人所得税APP、自然人电子税务局Web端及扣缴客户端等核心产品的全生命周期管理，包括迭代规划、需求深度分析、核心功能建设与优化、运营策划，支撑全国<strong class="highlight-data">7.8亿</strong>自然人及<strong class="highlight-data">4000万</strong>企业用户税务申报。</li>
+                                    <li>深入对接税务政策部门，主导政策解读与流程设计，推动税改政策数字化落地，包含涉税申报、代开发票、专项附加扣除、自然人信用等业务模块。</li>
+                                    <li>制定功能上线节奏与运营推广策略，年均交付功能<strong class="highlight-data">100+</strong>，使关键业务办理时长降低<strong class="highlight-data">30%</strong>。</li>
+                                    <li>撰写项目招投标方案并提供日常交付支持，确保各阶段按期履约与高质量交付，项目验收通过率<strong class="highlight-data">100%</strong>。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <h3 class="timeline-title">苏宁易购电子商务有限公司</h3>
+                                <span class="timeline-date">2019-05 ~ 2021-12</span>
+                            </div>
+                            <div class="timeline-position">产品经理</div>
+                            <div class="timeline-body">
+                                <ul>
+                                    <li>负责苏宁易购财务预算绩效及财务数据服务产品的理念梳理与功能设计，明确业务痛点与关键指标，绘制产品蓝图。</li>
+                                    <li>主导全面预算管理平台（含预算编制、控制、调整、分析、滚动预测、费用控制等）的架构设计与迭代规划，跟踪各阶段产品功能落地与版本发布，惠及集团共计<strong class="highlight-data">46万</strong>人员。</li>
+                                    <li>与业务方深度对接，梳理复杂的业务需求并转化为 PRD、流程图与可交互原型；组织开发测试团队进行需求评审与立项。</li>
+                                    <li>兼任项目经理职责，监控开发进度与交付质量，协调跨部门资源，确保平台按期上线与稳定运行。</li>
+                                    <li>持续收集运营与用户反馈，推动系统运维与产品迭代，支持业务策略调整与目标达成。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <h3 class="timeline-title">解放号网络科技有限公司</h3>
+                                <span class="timeline-date">2018-02 ~ 2019-05</span>
+                            </div>
+                            <div class="timeline-position">产品助理</div>
+                            <div class="timeline-body">
+                                <ul>
+                                    <li>负责解放号平台的优化需求全流程管理：收集业务痛点，梳理优先级，并推进功能迭代落地，确保改进项按排期上线。</li>
+                                    <li>构建政企供应商能力与资质画像，输出标准化能力模型报告，支持平台匹配与风控决策。</li>
+                                    <li>负责APP和WEB端订单项目的需求梳理及后续撮合跟进，优化需求分级管理机制，提升交易撮合效率<strong class="highlight-data">22%</strong>，确保订单的高效流转与精准撮合。</li>
+                                    <li>规划并执行南京市"互联网+软件交易服务"平台供应商侧常态运营活动，配合招投标及开标流程，保障合规与流程顺畅。</li>
+                                    <li>运用 Excel 与 SQL 对平台运营和订单数据进行整理与分析，定期产出数据报告，为管理层提供决策支持。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 项目经验 -->
+    <section id="projects" class="projects section">
+        <div class="card-container">
+            <div class="section-card">
+                <h2 class="section-title">项目经验</h2>
+                <div class="projects-grid">
+                    <!-- 项目一 -->
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">个人所得税APP&自然人电子税务局持续迭代项目</h3>
+                            <span class="project-time">2021-12 ~ 至今</span>
+                        </div>
+                        <div class="project-role">产品经理</div>
+                        <div class="project-content">
+                            <div class="project-section">
+                                <h4 class="project-section-title">项目背景与挑战</h4>
+                                <ul class="project-list">
+                                    <li>为响应国家税制改革，提高税收征管效率及纳税服务体验，通过本项目为全国纳税人构建统一、高效的自然人税收管理服务平台。</li>
+                                </ul>
+                            </div>
+                            <div class="project-section">
+                                <h4 class="project-section-title">我的职责与行动</h4>
+                                <ul class="project-list">
+                                    <li>产品策略与核心功能优化：
+                                        <ul>
+                                            <li>主导设计并持续优化"经营所得申报"及"年度汇算"等核心功能模块。通过精简申报流程、引入智能预填技术，有效将用户平均申报时长缩短约<strong class="highlight-data">40%</strong>。该系列功能已服务超<strong class="highlight-data">2亿</strong>实名注册用户，年度汇算期申报完成率保持在<strong class="highlight-data">98%</strong>的较高水平，切实提升了大规模用户申报体验和效率。</li>
+                                            <li>规划并实施"年度汇算清缴"、"专项附加扣除"等关键业务场景的场景化引导方案。基于用户特征（如家庭结构、地区差异等）动态推荐可申报项目，显著提升了符合条件用户对专项附加扣除等政策的认知与申报覆盖率达<strong class="highlight-data">35%</strong>，助力个税改革红利精准触达纳税人。</li>
+                                        </ul>
+                                    </li>
+                                    <li>业务创新与政策敏捷落地：
+                                        <ul>
+                                            <li>主导设计"个人代开增值税发票并自动扣缴个税"创新业务，实现闭环管理，强化风险防控。针对新增税收政策（如"3岁以下婴幼儿照护"），<strong class="highlight-data">3个工作日内</strong>完成产品化落地并上线，保障政策及时惠及纳税人。</li>
+                                        </ul>
+                                    </li>
+                                    <li>数据驱动与跨部门协同：
+                                        <ul>
+                                            <li>积极协同并推动与公安、人社、民政等相关部门的数据接口对接与信息共享。主导实现了包括子女学籍、继续教育状态等七类个人信息的自动获取与预填核验功能，使用户办理相关业务时手动提交的材料减少约<strong class="highlight-data">70%</strong>，大幅简化了用户操作。</li>
+                                            <li>基于用户行为数据和税务信息，参与构建用户分层模型。结合模型分析，针对特定用户群体（如首次申报、退税疑难用户）优化服务流程，例如为符合条件的纳税人提供更为顺畅的退税体验，有效提升了产品口碑和用户满意度。</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="project-section">
+                                <h4 class="project-section-title">核心成果与影响</h4>
+                                <ul class="project-list">
+                                    <li>用户体验：DAU突破<strong class="highlight-data">1800万</strong>，申报高峰期系统可用性<strong class="highlight-data">99.99%</strong>。</li>
+                                    <li>政策落地：汇算申报完成率<strong class="highlight-data">96.15%</strong>，政策知晓率提升<strong class="highlight-data">17.67%</strong>。</li>
+                                    <li>风险控制：依托智能退税模型，实现重点人群<strong class="highlight-data">48小时</strong>极速退税，NPS提升<strong class="highlight-data">22个百分点</strong>。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 项目二 -->
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">个人所得税APP-代际升级项目</h3>
+                            <span class="project-time">2023-01 ~ 2023-12</span>
+                        </div>
+                        <div class="project-role">产品经理</div>
+                        <div class="project-content">
+                            <div class="project-section">
+                                <h4 class="project-section-title">项目背景与挑战</h4>
+                                <ul class="project-list">
+                                    <li>为提升个人所得税APP的用户体验与智能化水平，针对界面风格、设计样式及组件交互进行全面优化升级，简化操作路径，提升办税效率，满足多样化人群的使用需求。</li>
+                                </ul>
+                            </div>
+                            <div class="project-section">
+                                <h4 class="project-section-title">我的职责与行动</h4>
+                                <ul class="project-list">
+                                    <li>全面梳理"首页"、"待办"、"服务"、"消息"、"我的"等核心频道页的业务流程与用户操作路径，明确功能定位，优化信息呈现逻辑，使操作更清晰直观。</li>
+                                    <li>统一规划并推进全局弹窗组件升级、门户功能图标重构及核心业务办理/查询流程标准化，提升视觉一致性与用户认知效率。</li>
+                                    <li>主导界面"友好性"系统升级，涵盖提示提醒场景优化、适老化设计（大字体、简化流程等）与语音交互等新型体验探索。</li>
+                                    <li>推动系统性布局重构，优化首页运营区域与服务入口排布，整合创新服务管理频道，实现功能分区更加合理、直达业务核心。</li>
+                                    <li>设计并上线"待办"频道，实现个人涉税事项的集中提醒与一站式办理，有效提升用户业务处理效率。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 项目三 -->
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">苏宁预算管控平台建设</h3>
+                            <span class="project-time">2019-07 ~ 2020-12</span>
+                        </div>
+                        <div class="project-role">产品经理、项目经理</div>
+                        <div class="project-content">
+                            <div class="project-section">
+                                <h4 class="project-section-title">项目背景与挑战</h4>
+                                <ul class="project-list">
+                                    <li>为深化业财融合，需构建能适应多业态（零售、金融、物流等）并覆盖预算全周期（从概算、目标设定到编制、管控）的统一预算平台。</li>
+                                </ul>
+                            </div>
+                            <div class="project-section">
+                                <h4 class="project-section-title">我的职责与行动</h4>
+                                <ul class="project-list">
+                                    <li>实现多产业的经营预算（销售、费用）、人力成本、资本性支出、投资、财务等预算编制、滚动、报表查看，自研类 EXCEL 客户端，满足多人在线填报、公式自动汇总、填报模板自定义等创新功能。</li>
+                                    <li>主导设计并推动上线了包括<strong class="highlight-data">100+</strong>指标线上流转、费用预算集中处理、编制过程智能管控、集成审批流及实时报表分析等关键功能。</li>
+                                </ul>
+                            </div>
+                            <div class="project-section">
+                                <h4 class="project-section-title">主要成就与价值</h4>
+                                <ul class="project-list">
+                                    <li>对接营销系统、报账中心等业务系统，实现自定义多维控制策略；将关键业务指标（如100+预算指标处理）、核心流程（费用测算、审批）均实现线上化、自动化。</li>
+                                    <li>接入企业 IM 和邮件系统进行智能预警、强化过程管控和数据透明化，为业财一体进行数据追溯。</li>
+                                    <li>全面提升集团数智化办公能效，为精细化管理和战略决策提供了有力支持。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 项目四 -->
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">数据服务平台建设</h3>
+                            <span class="project-time">2020-12 ~ 2021-04</span>
+                        </div>
+                        <div class="project-role">产品经理</div>
+                        <div class="project-content">
+                            <div class="project-section">
+                                <h4 class="project-section-title">项目背景与挑战</h4>
+                                <ul class="project-list">
+                                    <li>为响应公司"去SAP-BW"数据仓库的战略转型规划，解决业财团队因传统数据处理方式导致的日常作业效率低下、易出错等痛点。自研数据服务平台，将BW 系统中销售、费用、获利、售后、物流模型数据导入、调整、查询的部分进行自研迁移，提升数据处理自动化水平与分析能力。</li>
+                                </ul>
+                            </div>
+                            <div class="project-section">
+                                <h4 class="project-section-title">我的职责与关键成果</h4>
+                                <ul class="project-list">
+                                    <li>深入业务调研，将复杂数据流程转化为解决方案和产品需求，主导设计主数据管理、模型管理、规则配置、指标管理、预警监控及数据分析等核心模块，平台上线后显著降低人工数据处理错误率，大幅提升业财作业效率，支撑了管理者对经营数据和预算数据的日常考核与深度分析需求，为公司节省可观人力成本并奠定数据基础。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 项目五 -->
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">家乐福融合项目</h3>
+                            <span class="project-time">2020-04 ~ 2020-07</span>
+                        </div>
+                        <div class="project-role">产品经理</div>
+                        <div class="project-content">
+                            <div class="project-section">
+                                <h4 class="project-section-title">项目背景与挑战</h4>
+                                <ul class="project-list">
+                                    <li>为加速集团收购家乐福后经营模式和绩效考核的业务融合，通过此项目将家乐福前台(经、销、存、会员、订单等)、中台、后台(核算、预算、绩效考核等)各业务域完成切换。</li>
+                                </ul>
+                            </div>
+                            <div class="project-section">
+                                <h4 class="project-section-title">我的职责与关键成果</h4>
+                                <ul class="project-list">
+                                    <li>我在项目中主要负责财务核算、预算、绩效考核等后台业务相关产品规划与设计，确保新系统精准支持家乐福独特的日销售计划填报及细颗粒度（处、课级）主数据管理需求，将资源管控接入供应商投入资源、我司投入资源，新增资源池和管控报表实现。</li>
+                                    <li>替换家乐福原有海波龙系统，完成销售成本、内部往来、采购应付、科目记账维度的记账方式和历史数据切换，上线后每月节约人天<strong class="highlight-data">150+</strong>人天，显著提升运营效率。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 项目六 -->
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">苏宁预算调整平台建设</h3>
+                            <span class="project-time">2021-04 ~ 2021-07</span>
+                        </div>
+                        <div class="project-role">产品经理、项目经理</div>
+                        <div class="project-content">
+                            <div class="project-section">
+                                <h4 class="project-section-title">项目背景与挑战</h4>
+                                <ul class="project-list">
+                                    <li>针对企业经营中预算调整频繁且缺乏统一规范的痛点，以及提升业财一体化服务能力的需求，立项旨在从0到1构建一个适配苏宁业务特性的预算调整平台，实现调整流程的有序化与规则的标准化。</li>
+                                </ul>
+                            </div>
+                            <div class="project-section">
+                                <h4 class="project-section-title">我的职责与关键成果</h4>
+                                <ul class="project-list">
+                                    <li>主导产品规划、设计（PRD、高保真原型）及项目落地。新平台有效支持苏宁全集团日常预算调整需求，，覆盖13个费用大类及超100个科目，显著优化流程规范性与透明度。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 技能特长 -->
+    <section id="skills" class="skills section">
+        <div class="card-container">
+            <div class="section-card">
+                <h2 class="section-title">技能特长</h2>
+                <div class="skills-description">
+                    <h3 class="skills-summary-title">核心能力概述</h3>
+                    <p class="skills-summary-text"><i class="ri-draft-line"></i> 具备优秀的产品架构设计能力和高质量的PRD交付能力，擅长将复杂业务逻辑梳理为可落地的标准化流程。</p>
+                    <div class="skills-tags">
+                        <span class="skill-tag">PRD高质量</span>
+                        <span class="skill-tag">需求洞察</span>
+                        <span class="skill-tag">架构设计</span>
+                        <span class="skill-tag">0-1产品</span>
+                        <span class="skill-tag">流程梳理</span>
+                        <span class="skill-tag">SQL数据分析</span>
+                    </div>
+
+                    <p class="skills-summary-text"><i class="ri-team-line"></i> 具备一定的项目管理经验，能够有效协调UED、研发、测试等跨职能团队资源，以结果为导向、推动项目按时高质量交付。</p>
+                    <div class="skills-tags">
+                        <span class="skill-tag">资源协调</span>
+                        <span class="skill-tag">结果导向</span>
+                        <span class="skill-tag">风险规避</span>
+                        <span class="skill-tag">时间管理</span>
+                        <span class="skill-tag">团队协作</span>
+                    </div>
+
+                    <p class="skills-summary-text"><i class="ri-ai-generate"></i> 
+                        热衷于探索和应用AI技术（如Agent、RAG）来提升产品智能化水平，并能快速学习和应用新知识，为个人及团队提效降负。</p>
+                    <div class="skills-tags">
+                        <span class="skill-tag">Vibe coding</span>
+                        <span class="skill-tag">RAG知识库搭建</span>
+                        <span class="skill-tag">Dify智能体</span>
+                        <span class="skill-tag">生成式AI制作原型</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 其他自述 -->
+    <section id="about" class="about section">
+        <div class="card-container">
+            <div class="section-card">
+                <h2 class="section-title">其他非核心竞争力</h2>
+                <div class="self-assessment-content">
+                    <div class="self-item">
+                        <div class="self-item-header">
+                            <i class="ri-shield-user-line"></i>
+                            <h3>职业素养</h3>
+                        </div>
+                        <p>热爱产品工作，做事结果导向、尊重事实、善于学习并快速应用</p>
+                    </div>
+                    <div class="self-item">
+                        <div class="self-item-header">
+                            <i class="ri-focus-3-line"></i>
+                            <h3>工作特点</h3>
+                        </div>
+                        <p>善于捕捉细节变化、识别差异；产品打磨过程精益求精、做事专注有激情</p>
+                    </div>
+                    <div class="self-item">
+                        <div class="self-item-header">
+                            <i class="ri-user-heart-line"></i>
+                            <h3>个人性格</h3>
+                        </div>
+                        <p>皮实、温和细致乐观、责任心强、同理心强好相处，和我共事的同学应该都挺愉快</p>
+                    </div>
+                    <div class="self-item">
+                        <div class="self-item-header">
+                            <i class="ri-heart-3-line"></i>
+                            <h3>兴趣爱好</h3>
+                        </div>
+                        <div class="hobbies-container">
+                            <div class="hobby-tag"><i class="ri-compass-3-line"></i> 一切体验感丰富的活动</div>
+                            <div class="hobby-tag"><i class="ri-chat-3-line"></i> 认知提升（信息流动交换）</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 荣誉证书 -->
+    <section id="honors" class="honors section">
+        <div class="card-container">
+            <div class="section-card">
+                <h2 class="section-title">荣誉证书</h2>
+                <div class="honors-grid">
+                    <div class="honor-card">
+                        <div class="honor-card-inner">
+                            <div class="certificate-img">
+                                <img src="杭州市E类人才.pic.jpg" alt="杭州市E类人才证书" loading="lazy">
+                            </div>
+                            <div class="honor-content">
+                                <h3>杭州市E类人才</h3>
+                                <span class="view-cert viewable-certificate" data-image="杭州市E类人才.pic.jpg">查看证书 <i class="ri-fullscreen-line"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="honor-card">
+                        <div class="honor-card-inner">
+                            <div class="certificate-img">
+                                <img src="信息系统项目管理师.jpg" alt="信息系统项目管理师（高级）证书" loading="lazy">
+                            </div>
+                            <div class="honor-content">
+                                <h3>信息系统项目管理师（高级）</h3>
+                                <span class="view-cert viewable-certificate" data-image="信息系统项目管理师.jpg">查看证书 <i class="ri-fullscreen-line"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="honor-card">
+                        <div class="honor-card-inner">
+                            <div class="certificate-img">
+                                <img src="突出个人.JPEG" alt="2020年度研发中心突出个人奖证书" loading="lazy">
+                            </div>
+                            <div class="honor-content">
+                                <h3>2020年度研发中心突出个人奖</h3>
+                                <span class="view-cert viewable-certificate" data-image="突出个人.JPEG">查看证书 <i class="ri-fullscreen-line"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="honor-card">
+                        <div class="honor-card-inner">
+                            <div class="certificate-img">
+                                <img src="智慧零售奖.JPEG" alt="2020年度智慧零售创新项目奖证书" loading="lazy">
+                            </div>
+                            <div class="honor-content">
+                                <h3>2020年度智慧零售创新项目奖</h3>
+                                <span class="view-cert viewable-certificate" data-image="智慧零售奖.JPEG">查看证书 <i class="ri-fullscreen-line"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="other-honors">
+                    <h3 class="other-honors-title">其他荣誉</h3>
+                    <ul class="other-honors-list">
+                        <li>2021年度优秀员工</li>
+                        <li>浙江省政府采购项目评审专家</li>
+                        <li>英语四级CET-4</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 证书灯箱弹窗 -->
+    <div class="certificate-modal" id="certificate-modal" style="display: none;">
+        <div class="certificate-modal-content">
+            <span class="close-certificate">&times;</span>
+            <img src="" alt="证书图片" id="certificate-image">
+        </div>
+    </div>
+
+    <!-- 联系我 -->
+    <section id="contact" class="contact section">
+        <div class="card-container">
+            <div class="section-card">
+                <h2 class="section-title">联系我</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="ri-phone-line contact-icon"></i>
+                            <div class="contact-detail">
+                                <h3>电话</h3>
+                                <a href="tel:13057655719" class="contact-link highlight-contact">13057655719</a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="ri-wechat-line contact-icon"></i>
+                            <div class="contact-detail">
+                                <h3>微信</h3>
+                                <a href="#" class="contact-link wechat-link highlight-contact" id="wechat-qr">13057655719 (同手机号)</a>
+                                <div class="qr-code" id="qr-popup">
+                                    <div class="qr-code-inner">
+                                        <img src="微信二维码.jpg" alt="微信二维码" class="qr-img">
+                                        <span class="qr-close">&times;</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="ri-mail-line contact-icon"></i>
+                            <div class="contact-detail">
+                                <h3>邮箱</h3>
+                                <a href="mailto:2516246811@qq.com" class="contact-link highlight-contact">2516246811@qq.com</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-message">
+                        <p>期待与您交流！</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="card-container">
+            <span id="current-year"></span>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <a href="#" id="back-to-top-btn" class="back-to-top-btn" title="返回顶部">
+        <i class="ri-arrow-up-s-line"></i>
+        <span>返回顶部</span>
+    </a>
+
+    <!-- 微信二维码弹窗 -->
+    <div class="modal" id="wechat-modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <img src="微信二维码.jpg" alt="微信二维码" class="modal-qr">
+        </div>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        /**
+         * 当用户滚动页面时，控制"返回顶部"按钮的显示和隐藏。
+         * 当按钮被点击时，平滑滚动到页面顶部。
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            const backToTopButton = document.getElementById('back-to-top-btn');
+            // 页面进度条元素
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress-bar');
+            
+            // 平滑滚动处理
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if(targetId !== '#') {
+                        const targetElement = document.querySelector(targetId);
+                        if(targetElement) {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // 初始化粒子背景
+            particlesJS('global-particles', {
+                "particles": {
+                    "number": {
+                        "value": 80, // 增加粒子数量到80
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#6a4da1" // 使用网站主题色
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.35, // 增加不透明度使其更加可见
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#6a4da1", // 使用网站主题色
+                        "opacity": 0.35, // 增加线条不透明度
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 3, // 增加移动速度至3
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": false, // 禁用点击事件以减少干扰
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 0.4 // 增加交互时线条不透明度
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            /**
+             * 计算页面滚动百分比并更新进度条
+             */
+            function updateProgressBar() {
+                // 计算页面总高度（减去窗口高度，因为滚动到底部时，scrollTop等于总高度减窗口高度）
+                const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+                // 计算当前滚动位置
+                const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+                // 计算滚动百分比
+                const scrollPercentage = (scrollPosition / totalHeight) * 100;
+                
+                // 更新进度条宽度
+                progressBar.style.width = scrollPercentage + '%';
+                
+                // 控制进度条显示/隐藏：第一屏不显示，滚动后显示
+                if (scrollPosition > window.innerHeight * 0.3) { // 滚动超过30%的窗口高度
+                    progressContainer.style.opacity = '1';
+                } else {
+                    progressContainer.style.opacity = '0';
+                }
+            }
+            
+            /**
+             * 根据页面滚动位置切换按钮的可见性。
+             */
+            window.addEventListener('scroll', function() {
+                // 更新进度条
+                updateProgressBar();
+                
+                if (window.pageYOffset > 300) { // 当页面向下滚动超过300像素时显示按钮
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+
+            /**
+             * 点击按钮时平滑滚动到页面顶部。
+             * @param {Event} event - 点击事件对象。
+             */
+            backToTopButton.addEventListener('click', function(event) {
+                event.preventDefault(); // 阻止链接的默认行为
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // 平滑滚动
+                });
+            });
+
+            // 证书灯箱逻辑
+            const certificateModal = document.getElementById('certificate-modal');
+            const certificateImage = document.getElementById('certificate-image');
+            const closeCertificate = document.querySelector('.close-certificate');
+            // 修改为选择.viewable-certificate而不是.honor-card
+            const viewCertButtons = document.querySelectorAll('.viewable-certificate');
+
+            if (viewCertButtons.length > 0) {
+                viewCertButtons.forEach(button => {
+                    button.addEventListener('click', function(event) {
+                        event.stopPropagation(); // 阻止事件冒泡
+                        const imageSrc = this.getAttribute('data-image');
+                        certificateImage.src = imageSrc;
+                        certificateModal.style.display = 'flex';
+                        document.body.style.overflow = 'hidden'; // 防止背景滚动
+                    });
+                });
+            }
+
+            if (closeCertificate) {
+                closeCertificate.addEventListener('click', function() {
+                    certificateModal.style.display = 'none';
+                    document.body.style.overflow = ''; // 恢复背景滚动
+                });
+            }
+
+            // 微信二维码弹窗逻辑 - 完全独立的处理
+            const wechatLink = document.getElementById('wechat-qr');
+            const wechatModal = document.getElementById('wechat-modal');
+            const closeWechatModal = document.querySelector('.close-modal');
+
+            if (wechatLink) {
+                wechatLink.addEventListener('click', function(event) {
+                    event.preventDefault(); // 阻止链接默认行为
+                    wechatModal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden'; // 防止背景滚动
+                });
+            }
+
+            if (closeWechatModal) {
+                closeWechatModal.addEventListener('click', function() {
+                    wechatModal.style.display = 'none';
+                    document.body.style.overflow = ''; // 恢复背景滚动
+                });
+            }
+
+            // 点击窗口其他区域关闭弹窗的通用逻辑 - 分别处理
+            window.addEventListener('click', function(event) {
+                // 证书弹窗点击外部关闭
+                if (event.target === certificateModal) {
+                    certificateModal.style.display = 'none';
+                    document.body.style.overflow = ''; // 恢复背景滚动
+                }
+                // 微信弹窗点击外部关闭
+                if (event.target === wechatModal) {
+                    wechatModal.style.display = 'none';
+                    document.body.style.overflow = ''; // 恢复背景滚动
+                }
+            });
+            
+            // 页面加载时初始化进度条
+            updateProgressBar();
+        });
+    </script>
+    <script src="main.js"></script>
+</body>
+</html> 
