@@ -381,6 +381,28 @@
                 font-size: 20px; 
             } */
         /* } */
+        
+        /* 移除第一个项目经验中的列表项前的圆点，但保持缩进 */
+        .projects-grid .project-card:first-child .project-list > li > ul {
+            list-style-type: none;
+            padding-left: 20px; /* 保持缩进 */
+        }
+        
+        /* 针对带有no-bullets类的列表，移除列表项前的圆点但保持缩进 */
+        .no-bullets {
+            list-style-type: none !important;
+            padding-left: 12px !important; /* 减少缩进从20px到12px */
+        }
+        
+        /* 移除第一个项目中二级列表项的伪元素圆点 */
+        .projects-grid .project-card:first-child .project-list > li > ul.no-bullets li::before {
+            content: none !important;
+        }
+        
+        /* 为了确保样式生效，添加更具体的选择器 */
+        .project-card:first-child .no-bullets li::before {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -424,7 +446,7 @@
                     <div class="overview-main">
                         <div class="overview-header">
                             <div class="overview-image">
-                                <img src="头像.pic.jpg" alt="张韬个人照片" class="profile-img">
+                                <img src="images/头像.pic.jpg" alt="张韬个人照片" class="profile-img">
                             </div>
                             <div class="overview-title">
                                 <h1 class="hero-title">张韬</h1>
@@ -557,20 +579,20 @@
                                 <h4 class="project-section-title">我的职责与行动</h4>
                                 <ul class="project-list">
                                     <li>产品策略与核心功能优化：
-                                        <ul>
+                                        <ul class="no-bullets">
                                             <li>主导设计并持续优化"经营所得申报"及"年度汇算"等核心功能模块。通过精简申报流程、引入智能预填技术，有效将用户平均申报时长缩短约<strong class="highlight-data">40%</strong>。该系列功能已服务超<strong class="highlight-data">2亿</strong>实名注册用户，年度汇算期申报完成率保持在<strong class="highlight-data">98%</strong>的较高水平，切实提升了大规模用户申报体验和效率。</li>
                                             <li>规划并实施"年度汇算清缴"、"专项附加扣除"等关键业务场景的场景化引导方案。基于用户特征（如家庭结构、地区差异等）动态推荐可申报项目，显著提升了符合条件用户对专项附加扣除等政策的认知与申报覆盖率达<strong class="highlight-data">35%</strong>，助力个税改革红利精准触达纳税人。</li>
                                         </ul>
                                     </li>
                                     <li>业务创新与政策敏捷落地：
-                                        <ul>
+                                        <ul class="no-bullets">
                                             <li>主导设计"个人代开增值税发票并自动扣缴个税"创新业务，实现闭环管理，强化风险防控。针对新增税收政策（如"3岁以下婴幼儿照护"），<strong class="highlight-data">3个工作日内</strong>完成产品化落地并上线，保障政策及时惠及纳税人。</li>
                                         </ul>
                                     </li>
                                     <li>数据驱动与跨部门协同：
-                                        <ul>
-                                            <li>积极协同并推动与公安、人社、民政等相关部门的数据接口对接与信息共享。主导实现了包括子女学籍、继续教育状态等七类个人信息的自动获取与预填核验功能，使用户办理相关业务时手动提交的材料减少约<strong class="highlight-data">70%</strong>，大幅简化了用户操作。</li>
-                                            <li>基于用户行为数据和税务信息，参与构建用户分层模型。结合模型分析，针对特定用户群体（如首次申报、退税疑难用户）优化服务流程，例如为符合条件的纳税人提供更为顺畅的退税体验，有效提升了产品口碑和用户满意度。</li>
+                                        <ul class="no-bullets">
+                                            <li>积极协同并推动与公安、人社、民政等相关部门的数据接口对接与信息共享。实现了包括子女学籍、继续教育状态等七类个人信息的自动获取与预填核验功能，使用户办理相关业务时手动提交的材料减少约<strong class="highlight-data">70%</strong>，大幅简化了用户操作。</li>
+                                            <li>基于用户行为数据和税务信息，参与构建用户分层模型，针对特定用户群体（如首次申报、退税疑难用户）优化服务流程，为符合条件的纳税人提供更为顺畅的退税体验，有效提升了产品口碑和用户满意度。</li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -578,9 +600,9 @@
                             <div class="project-section">
                                 <h4 class="project-section-title">核心成果与影响</h4>
                                 <ul class="project-list">
-                                    <li>用户体验：DAU突破<strong class="highlight-data">1800万</strong>，申报高峰期系统可用性<strong class="highlight-data">99.99%</strong>。</li>
+                                    <li>用户体验：DAU突破<strong class="highlight-data">1800万</strong>，申报高峰期系统可用性<strong class="highlight-data">99.99%</strong>，创新场景落地赢得用户认可。</li>
                                     <li>政策落地：汇算申报完成率<strong class="highlight-data">96.15%</strong>，政策知晓率提升<strong class="highlight-data">17.67%</strong>。</li>
-                                    <li>风险控制：依托智能退税模型，实现重点人群<strong class="highlight-data">48小时</strong>极速退税，NPS提升<strong class="highlight-data">22个百分点</strong>。</li>
+                                    <li>风险控制：依托智能退税模型，实现重点人群<strong class="highlight-data">48小时</strong>极速退税。</li>
                                 </ul>
                             </div>
                         </div>
@@ -726,11 +748,11 @@
                 <h2 class="section-title">技能特长</h2>
                 <div class="skills-description">
                     <h3 class="skills-summary-title">核心能力概述</h3>
-                    <p class="skills-summary-text"><i class="ri-draft-line"></i> 具备优秀的产品架构设计能力和高质量的PRD交付能力，擅长将复杂业务逻辑梳理为可落地的标准化流程。</p>
+                    <p class="skills-summary-text"><i class="ri-draft-line"></i> 具备良好的产品架构设计能力和高质量的PRD交付能力，业务sense较好，擅长将复杂业务逻辑梳理为可落地的标准化流程。</p>
                     <div class="skills-tags">
-                        <span class="skill-tag">PRD高质量</span>
+                        <span class="skill-tag">Axure原型</span>
                         <span class="skill-tag">需求洞察</span>
-                        <span class="skill-tag">架构设计</span>
+                        <span class="skill-tag">业务sense</span>
                         <span class="skill-tag">0-1产品</span>
                         <span class="skill-tag">流程梳理</span>
                         <span class="skill-tag">SQL数据分析</span>
@@ -741,7 +763,7 @@
                         <span class="skill-tag">资源协调</span>
                         <span class="skill-tag">结果导向</span>
                         <span class="skill-tag">风险规避</span>
-                        <span class="skill-tag">时间管理</span>
+                        <span class="skill-tag">干系人管理</span>
                         <span class="skill-tag">团队协作</span>
                     </div>
 
@@ -750,8 +772,8 @@
                     <div class="skills-tags">
                         <span class="skill-tag">Vibe coding</span>
                         <span class="skill-tag">RAG知识库搭建</span>
-                        <span class="skill-tag">Dify智能体</span>
-                        <span class="skill-tag">生成式AI制作原型</span>
+                        <span class="skill-tag">Agent应用</span>
+                        <span class="skill-tag">Text to SQL</span>
                     </div>
                 </div>
             </div>
@@ -769,7 +791,7 @@
                             <i class="ri-shield-user-line"></i>
                             <h3>职业素养</h3>
                         </div>
-                        <p>热爱产品工作，做事结果导向、尊重事实、善于学习并快速应用</p>
+                        <p>热爱产品工作，善于学习并快速应用，做事结果导向，数据驱动业务优化、尊重事实</p>
                     </div>
                     <div class="self-item">
                         <div class="self-item-header">
@@ -792,7 +814,7 @@
                         </div>
                         <div class="hobbies-container">
                             <div class="hobby-tag"><i class="ri-compass-3-line"></i> 一切体验感丰富的活动</div>
-                            <div class="hobby-tag"><i class="ri-chat-3-line"></i> 认知提升（信息流动交换）</div>
+                            <div class="hobby-tag"><i class="ri-chat-3-line"></i> 播客</div>
                         </div>
                     </div>
                 </div>
@@ -809,44 +831,44 @@
                     <div class="honor-card">
                         <div class="honor-card-inner">
                             <div class="certificate-img">
-                                <img src="杭州市E类人才.pic.jpg" alt="杭州市E类人才证书" loading="lazy">
+                                <img src="images/杭州市E类人才.pic.jpg" alt="杭州市E类人才证书" loading="lazy">
                             </div>
                             <div class="honor-content">
                                 <h3>杭州市E类人才</h3>
-                                <span class="view-cert viewable-certificate" data-image="杭州市E类人才.pic.jpg">查看证书 <i class="ri-fullscreen-line"></i></span>
+                                <span class="view-cert viewable-certificate" data-image="images/杭州市E类人才.pic.jpg">查看证书 <i class="ri-fullscreen-line"></i></span>
                             </div>
                         </div>
                     </div>
                     <div class="honor-card">
                         <div class="honor-card-inner">
                             <div class="certificate-img">
-                                <img src="信息系统项目管理师.jpg" alt="信息系统项目管理师（高级）证书" loading="lazy">
+                                <img src="images/信息系统项目管理师.jpg" alt="信息系统项目管理师（高级）证书" loading="lazy">
                             </div>
                             <div class="honor-content">
                                 <h3>信息系统项目管理师（高级）</h3>
-                                <span class="view-cert viewable-certificate" data-image="信息系统项目管理师.jpg">查看证书 <i class="ri-fullscreen-line"></i></span>
+                                <span class="view-cert viewable-certificate" data-image="images/信息系统项目管理师.jpg">查看证书 <i class="ri-fullscreen-line"></i></span>
                             </div>
                         </div>
                     </div>
                     <div class="honor-card">
                         <div class="honor-card-inner">
                             <div class="certificate-img">
-                                <img src="突出个人.JPEG" alt="2020年度研发中心突出个人奖证书" loading="lazy">
+                                <img src="images/突出个人.JPEG" alt="2020年度研发中心突出个人奖证书" loading="lazy">
                             </div>
                             <div class="honor-content">
-                                <h3>2020年度研发中心突出个人奖</h3>
-                                <span class="view-cert viewable-certificate" data-image="突出个人.JPEG">查看证书 <i class="ri-fullscreen-line"></i></span>
+                                <h3>研发中心年度突出个人奖</h3>
+                                <span class="view-cert viewable-certificate" data-image="images/突出个人.JPEG">查看证书 <i class="ri-fullscreen-line"></i></span>
                             </div>
                         </div>
                     </div>
                     <div class="honor-card">
                         <div class="honor-card-inner">
                             <div class="certificate-img">
-                                <img src="智慧零售奖.JPEG" alt="2020年度智慧零售创新项目奖证书" loading="lazy">
+                                <img src="images/智慧零售奖.JPEG" alt="2020年度智慧零售创新项目奖证书" loading="lazy">
                             </div>
                             <div class="honor-content">
-                                <h3>2020年度智慧零售创新项目奖</h3>
-                                <span class="view-cert viewable-certificate" data-image="智慧零售奖.JPEG">查看证书 <i class="ri-fullscreen-line"></i></span>
+                                <h3>苏宁智慧零售创新项目奖</h3>
+                                <span class="view-cert viewable-certificate" data-image="images/智慧零售奖.JPEG">查看证书 <i class="ri-fullscreen-line"></i></span>
                             </div>
                         </div>
                     </div>
@@ -892,7 +914,7 @@
                                 <a href="#" class="contact-link wechat-link highlight-contact" id="wechat-qr">13057655719 (同手机号)</a>
                                 <div class="qr-code" id="qr-popup">
                                     <div class="qr-code-inner">
-                                        <img src="微信二维码.jpg" alt="微信二维码" class="qr-img">
+                                        <img src="images/微信二维码.jpg" alt="微信二维码" class="qr-img">
                                         <span class="qr-close">&times;</span>
                                     </div>
                                 </div>
@@ -931,7 +953,7 @@
     <div class="modal" id="wechat-modal" style="display: none;">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <img src="微信二维码.jpg" alt="微信二维码" class="modal-qr">
+            <img src="images/微信二维码.jpg" alt="微信二维码" class="modal-qr">
         </div>
     </div>
 

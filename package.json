@@ -1,0 +1,20 @@
+{
+  "name": "jl-website",
+  "version": "1.0.0",
+  "description": "张韬 - 产品经理个人简历网站，展示技能、项目经验及联系方式",
+  "main": "main.js",
+  "scripts": {
+    "start": "live-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "resume",
+    "personal",
+    "website"
+  ],
+  "author": "张韬",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
